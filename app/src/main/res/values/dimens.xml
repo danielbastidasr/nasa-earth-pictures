@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="size_small_margin">8dp</dimen>
+    <dimen name="size_standard_margin">16dp</dimen>
+    <dimen name="size_view_holder_height">120dp</dimen>
+    <dimen name="size_full_earth_height">400dp</dimen>
+    <dimen name="size_coordinates_height">100dp</dimen>
+</resources>

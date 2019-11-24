@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".feature.naturallist.NaturalListFragment">
+
+   <TextView
+       android:id="@+id/errorMessage"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:textAlignment="center"
+       android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+       android:gravity="center"
+       tools:text="This is an error message"/>
+
+   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+       android:id="@+id/swipe_refresh"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+      <androidx.recyclerview.widget.RecyclerView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/naturalList"/>
+   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

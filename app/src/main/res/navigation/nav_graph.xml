@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/naturalListFragment">
+
+    <fragment
+        android:id="@+id/naturalListFragment"
+        android:name="daniel.bastidas.earthnasa.feature.naturallist.NaturalListFragment"
+        android:label="fragment_natural_list"
+        tools:layout="@layout/fragment_natural_list" >
+        <action
+            android:id="@+id/action_naturalListFragment_to_naturalDetailFragment"
+            app:destination="@id/naturalDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/naturalDetailFragment"
+        android:name="daniel.bastidas.earthnasa.feature.naturaldetail.NaturalDetailFragment"
+        android:label="fragment_natural_detail"
+        tools:layout="@layout/fragment_natural_detail">
+        <argument
+            android:name="naturalItem"
+            app:argType="daniel.bastidas.earthnasa.feature.naturaldetail.model.NaturalEarth"
+            />
+    </fragment>
+</navigation>
