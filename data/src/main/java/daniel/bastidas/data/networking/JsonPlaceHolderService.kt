@@ -1,6 +1,6 @@
 package daniel.bastidas.data.networking
 
-import daniel.bastidas.data.model.NaturalModel
+import daniel.bastidas.data.networking.model.NaturalModel
 import retrofit2.Response
 import retrofit2.http.GET
 

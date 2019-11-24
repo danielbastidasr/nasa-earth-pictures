@@ -2,6 +2,7 @@ package daniel.bastidas.earthnasa
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import daniel.bastidas.domain.getlistusecase.GetNaturalListUseCase
+import daniel.bastidas.domain.listenrefreshdatausecase.ListenRefreshDataUseCase
 import daniel.bastidas.earthnasa.common.aux.toPresentation
 import daniel.bastidas.earthnasa.common.navigation.NavigationOptions
 import daniel.bastidas.earthnasa.feature.naturaldetail.model.Coordinates
@@ -10,7 +11,6 @@ import daniel.bastidas.earthnasa.feature.naturallist.NaturalListViewModel
 import daniel.bastidas.earthnasa.util.CoroutineRule
 import daniel.bastidas.earthnasa.util.MockClasses
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.*
 import org.junit.Before
 import org.junit.Rule
@@ -21,8 +21,10 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class NaturalListViewModelTest {
 
+    // SET UP
     private lateinit var cut: NaturalListViewModel
-    private lateinit var uc: GetNaturalListUseCase
+    private lateinit var ucGetList: GetNaturalListUseCase
+    private lateinit var ucListenList: ListenRefreshDataUseCase
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -34,41 +36,40 @@ class NaturalListViewModelTest {
     @Before
     fun setUp() {
         // Default success
-        uc = GetNaturalListUseCase(MockClasses.NaturalListSuccess())
-        cut = NaturalListViewModel(uc)
+        ucGetList = GetNaturalListUseCase(MockClasses.NaturalListSuccess())
+        ucListenList = ListenRefreshDataUseCase(MockClasses.NaturalListSuccess())
+        cut = NaturalListViewModel(ucGetList,ucListenList)
     }
 
+
+    // TEST CASES
     @Test
     fun `verify state when GetListSuccess return List`() {
         // When
         cut.sendAction(NaturalListViewModel.UserAction.GetList)
 
-
         //Then
-        runBlocking {
-            cut.stateLiveData.value shouldEqual
-                    NaturalListViewModel.ViewState(
-                        list = MockClasses.NaturalListSuccess().getNaturalList().map { it.toPresentation() }
-                    )
-        }
+        cut.stateLiveData.value shouldEqual
+                NaturalListViewModel.ViewState(
+                    list = MockClasses.previousList.map { it.toPresentation() }
+                )
     }
 
     @Test
     fun `verify state when GetListError return Error`() {
         // Given
-        uc = GetNaturalListUseCase(MockClasses.NaturalListError())
-        cut = NaturalListViewModel(uc)
+        ucGetList = GetNaturalListUseCase(MockClasses.NaturalListError())
+        cut = NaturalListViewModel(ucGetList,ucListenList)
 
         // When
         cut.sendAction(NaturalListViewModel.UserAction.GetList)
 
         //Then
-        runBlocking {
-            cut.stateLiveData.value shouldEqual
-                    NaturalListViewModel.ViewState(
+        cut.stateLiveData.value shouldEqual
+                NaturalListViewModel.ViewState(
+                        list = MockClasses.previousList.map { it.toPresentation() },
                         error = MockClasses.ERROR_MESSAGE
                     )
-        }
     }
 
     @Test

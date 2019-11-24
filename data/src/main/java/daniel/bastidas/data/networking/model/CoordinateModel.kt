@@ -1,4 +1,4 @@
-package daniel.bastidas.data.model
+package daniel.bastidas.data.networking.model
 
 import com.squareup.moshi.Json
 

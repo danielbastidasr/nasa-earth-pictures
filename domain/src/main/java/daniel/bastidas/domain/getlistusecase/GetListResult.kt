@@ -1,11 +1,7 @@
 package daniel.bastidas.domain.getlistusecase
 
-import daniel.bastidas.domain.gateway.NaturalEntity
-
 sealed class GetListResult {
-    data class GetListSuccess(
-        val listEntities: List<NaturalEntity>
-    ) : GetListResult()
+    object GetListSuccess: GetListResult()
 
     data class GetListError(
         val exception: Exception

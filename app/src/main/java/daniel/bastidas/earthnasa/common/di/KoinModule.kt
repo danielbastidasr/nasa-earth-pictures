@@ -1,14 +1,17 @@
 package daniel.bastidas.earthnasa.common.di
 
 import daniel.bastidas.data.NaturalEarthRepository
+import daniel.bastidas.data.database.NaturalRoomDatabase
 import daniel.bastidas.data.networking.JsonPlaceHolderService
 import daniel.bastidas.data.networking.webserviceUrl
 import daniel.bastidas.domain.getlistusecase.GetNaturalListUseCase
 import daniel.bastidas.domain.gateway.NaturalEarthGateway
+import daniel.bastidas.domain.listenrefreshdatausecase.ListenRefreshDataUseCase
 import daniel.bastidas.earthnasa.feature.naturaldetail.NaturalDetailFragmentArgs
 import daniel.bastidas.earthnasa.feature.naturaldetail.NaturalDetailViewModel
 import daniel.bastidas.earthnasa.feature.naturallist.NaturalListViewModel
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -17,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 val presentationModule = module {
     viewModel {
-        NaturalListViewModel(getNaturalListUseCase = get())
+        NaturalListViewModel(getNaturalListUseCase = get(),listenRefreshDataUseCase = get())
     }
 
     viewModel {(args: NaturalDetailFragmentArgs) -> NaturalDetailViewModel(args.naturalItem) }
@@ -25,11 +28,12 @@ val presentationModule = module {
 
 val domainModule = module {
     factory { GetNaturalListUseCase(naturalEarthGateway = get()) }
+    factory { ListenRefreshDataUseCase(naturalEarthGateway = get()) }
 }
 
 
 val dataModule = module {
-    factory <NaturalEarthGateway> { NaturalEarthRepository(jsonPlaceHolderService = get()) }
+    factory <NaturalEarthGateway> { NaturalEarthRepository(jsonPlaceHolderService = get(),naturalDao = get() ) }
 
     // Network
     single {
@@ -48,6 +52,16 @@ val dataModule = module {
             .build()
     }
     single<JsonPlaceHolderService> { get<Retrofit>().create(JsonPlaceHolderService::class.java) }
+
+    // Database
+    single {
+        NaturalRoomDatabase.getDatabase(context = androidApplication())
+    }
+
+    single{
+        get<NaturalRoomDatabase>().naturalDao()
+    }
+
 }
 
 val koinModules = listOf(
