@@ -55,7 +55,7 @@ class NaturalEarthListAdapter(
             selected = naturalEarth
 
             itemView.run {
-                date.text = naturalEarth.id
+                date.text = naturalEarth.date
                 caption.text = naturalEarth.caption
                 Picasso
                     .get()
